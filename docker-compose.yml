@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  app:
+    command: uvicorn api.main:app --host 0.0.0.0 --port 8000
+    build:
+      context: .
+      target: current
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    networks:
+      - default
+
+  app-feat:
+    command: uvicorn api.main:app --host 0.0.0.0 --port 8000
+    build:
+      context: .
+      target: feat
+    volumes:
+      - .:/code
+    ports:
+      - "8001:8000"
+    networks:
+      - default
+
+  tests:
+    command: pytest -vv tests/test_api.py
+    build:
+      context: .
+      target: current
+    links:
+      - app
+    environment:
+      SERVER_HOST: app
+    networks:
+      - default
+
+  tests-feat:
+    command: pytest -vv tests/test_api.py
+    build:
+      context: .
+      target: feat
+    links:
+      - app-feat
+    environment:
+      SERVER_HOST: app-feat
+    networks:
+      - default

@@ -1,0 +1,5 @@
+fastapi==0.110.1
+langchain-google-genai @ git+https://github.com/Hunter71/langchain-google
+pytest==8.1.1
+requests==2.31.0
+uvicorn==0.29.0
